@@ -11,4 +11,4 @@ CMD ["/corebench"]
 # docker build -t corebench .
 
 # runcmd:
-# docker run -it --rm schnitz81/corebench
+# docker run -it --rm corebench
