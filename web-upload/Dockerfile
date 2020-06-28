@@ -54,7 +54,7 @@ ENTRYPOINT ["/startup.sh"]
 # docker build -t web-upload .
 #
 # Run cmd:
-# $ docker run -d -v /host/folder:/upload -p 8888:80 web-upload user password
+# $ docker run --name web-upload -d -v /host/folder:/upload -p 8888:80 web-upload user password
 # 
 # Change host folder and port 8888 to desired host port to expose.
 # The www user needs write access to the host folder.
