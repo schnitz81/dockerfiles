@@ -3,7 +3,7 @@
 # Web interface for uploading file to server.
 
 FROM alpine:3.12
-RUN apk update && apk add --no-cache nginx php7 php7-fpm sed apache2-utils
+RUN apk update && apk add --no-cache nginx php7 php7-fpm sed apache2-utils netcat-openbsd
 RUN mkdir /www
 RUN mkdir /upload
 RUN adduser -D -g 'www' www
@@ -17,12 +17,15 @@ ENV PHP_FPM_GROUP="www"
 ENV PHP_FPM_LISTEN_MODE="0660"
 ENV PHP_MEMORY_LIMIT="512M"
 ENV PHP_MAX_UPLOAD="1G"
-ENV PHP_MAX_FILE_UPLOAD="1000"
+ENV PHP_MAX_FILE_UPLOAD="1G"
 ENV PHP_MAX_POST="1G"
 ENV PHP_DISPLAY_ERRORS="On"
 ENV PHP_DISPLAY_STARTUP_ERRORS="On"
 ENV PHP_ERROR_REPORTING="E_COMPILE_ERROR\|E_RECOVERABLE_ERROR\|E_ERROR\|E_CORE_ERROR"
 ENV PHP_CGI_FIX_PATHINFO=0
+ENV PHP_MAX_INPUT_TIME=99999
+ENV PHP_MAX_EXECUTION_TIME=99999
+ENV NGINX_MAX_BODY_SIZE="1G"
 
 # Modifying configuration file www.conf 
 RUN sed -i "s|;listen.owner\s*=\s*nobody|listen.owner = ${PHP_FPM_USER}|g" /etc/php7/php-fpm.d/www.conf
@@ -41,11 +44,22 @@ RUN sed -i "s|;*upload_max_filesize =.*|upload_max_filesize = ${PHP_MAX_UPLOAD}|
 RUN sed -i "s|;*max_file_uploads =.*|max_file_uploads = ${PHP_MAX_FILE_UPLOAD}|i" /etc/php7/php.ini
 RUN sed -i "s|;*post_max_size =.*|post_max_size = ${PHP_MAX_POST}|i" /etc/php7/php.ini
 RUN sed -i "s|;*cgi.fix_pathinfo=.*|cgi.fix_pathinfo= ${PHP_CGI_FIX_PATHINFO}|i" /etc/php7/php.ini
+RUN sed -i "s|;*max_input_time=.*|max_input_time = ${PHP_MAX_INPUT_TIME}|i" /etc/php7/php.ini
+RUN sed -i "s|;*max_execution_time=.*|max_execution_time = ${PHP_MAX_EXECUTION_TIME}|i" /etc/php7/php.ini
 
 ADD nginx.conf /etc/nginx/nginx.conf
+
+# Modifying configuration file nginx.conf
+RUN sed -i "/http\ {/a \ \ \ \ \ \ \ \ client_max_body_size $NGINX_MAX_BODY_SIZE;" /etc/nginx/nginx.conf
+
 COPY app /www
 ADD startup.sh /startup.sh
 RUN chmod +x /startup.sh
+
+EXPOSE 80
+
+HEALTHCHECK --interval=1m --timeout=10s \
+    CMD nc -z localhost 80
 
 ENTRYPOINT ["/startup.sh"]
 
