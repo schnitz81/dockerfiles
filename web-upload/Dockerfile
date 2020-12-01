@@ -3,7 +3,7 @@
 # Web interface for uploading file to server.
 
 FROM alpine:3.12
-RUN apk update && apk add --no-cache nginx php7 php7-fpm sed apache2-utils netcat-openbsd
+RUN apk --no-cache update && apk add --no-cache nginx php7 php7-fpm sed apache2-utils netcat-openbsd
 RUN mkdir /www
 RUN mkdir /upload
 RUN adduser -D -g 'www' www
