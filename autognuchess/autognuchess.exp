@@ -12,6 +12,7 @@ while { true } {
 		"\{Draw" { send -- "quit\n"; exit }
 		"\{White" { send -- "quit\n"; exit }
 		"\{Black" { send -- "quit\n"; exit }
+		"\{Stalemate" { send -- "quit\n"; exit }
 		") :" { send -- "go\n"; exp_continue }
 		eof {exp_continue} 
 	}
