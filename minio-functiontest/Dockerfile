@@ -3,11 +3,13 @@
 # Automatically test accessibility and function of a minio database.
 
 FROM python:3-alpine
-RUN apk --no-cache update && apk --no-cache add bash
-RUN mkdir /minio-functiontest
+RUN apk --no-cache update \
+    && apk --no-cache add bash \
+    && mkdir /minio-functiontest
 WORKDIR /minio-functiontest
-RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x mc 
-RUN wget https://raw.githubusercontent.com/schnitz81/python-apps/main/minio-functiontest/minio-functiontest.py
+RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc \
+    && chmod +x mc \
+    &&  wget https://raw.githubusercontent.com/schnitz81/python-apps/main/minio-functiontest/minio-functiontest.py
 ENTRYPOINT ["python","-u","minio-functiontest.py"]
 
 # build:
