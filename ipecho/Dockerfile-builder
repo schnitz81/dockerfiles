@@ -1,0 +1,30 @@
+# ipecho builder
+#
+# image for automatically build ipecho
+#
+# ipecho - basic webserver that listens on port 80 and returns the apparent origin IP  
+
+FROM golang:alpine3.17
+
+LABEL name="ipecho builder"
+LABEL maintainer="schnitz81"
+LABEL description="Docker image for building ipecho from repo"
+LABEL url="https://github.com/schnitz81/dockerfiles/ipecho"
+LABEL project="https://github.com/lgrn/ipecho"
+
+RUN apk --no-cache update \
+	&& apk --no-cache add git \
+	&& git clone https://github.com/lgrn/ipecho.git \
+	&& mkdir -p /hostdir
+
+WORKDIR ipecho/
+
+ENTRYPOINT ["go", "build", "-o", "/hostdir"]
+# go build -o /hostdir 
+
+# build cmd:
+# $ docker build -t ipecho-builder -f Dockerfile-builder .
+#
+# run cmd (build artifact):
+# $ docker run ---name ipecho-builder --rm -v $PWD:/hostdir ipecho-builder
+

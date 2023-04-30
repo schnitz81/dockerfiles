@@ -1,0 +1,29 @@
+# ipecho
+#
+# basic webserver that listens on port 80 and returns the apparent origin IP 
+
+FROM alpine
+
+# install netcat for healthcheck
+RUN apk add --no-cache netcat-openbsd
+
+LABEL name="ipecho"
+LABEL maintainer="schnitz81"
+LABEL description="Docker image for containerized ipecho"
+LABEL url="https://github.com/schnitz81/dockerfiles/ipecho"
+LABEL project="https://github.com/lgrn/ipecho"
+
+# copy artifact created previously by the builder container
+COPY ipecho /
+
+HEALTHCHECK --interval=1m --timeout=10s \
+    CMD nc -z localhost 80
+
+ENTRYPOINT ["/ipecho"]
+
+# build cmd:
+# $ docker build -t ipecho -f Dockerfile-exec .
+#
+# run cmd:
+# $ docker run --name ipecho --rm -d ipecho
+
