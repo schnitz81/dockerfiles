@@ -17,7 +17,7 @@ fi
 
 # start services
 /usr/sbin/nginx &
-/usr/sbin/php-fpm7 &
+/usr/sbin/php-fpm83 &
 
 # keep container running
 sleep infinity
