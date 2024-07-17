@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.12-alpine
 RUN mkdir /treechanges
 WORKDIR /treechanges
 RUN wget https://raw.githubusercontent.com/schnitz81/python-apps/main/treechanges/main.py \

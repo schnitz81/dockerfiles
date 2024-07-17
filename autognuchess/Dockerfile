@@ -6,7 +6,7 @@
 #
 # Mount the container's /var/log to log the result of the game.
 
-FROM debian:buster-slim
+FROM debian:bookworm-slim
 RUN apt-get update \
     && apt-get install -y expect gnuchess
 ADD autognuchess.* /
