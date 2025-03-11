@@ -1,4 +1,4 @@
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 RUN mkdir /nwlogger
 WORKDIR /nwlogger
 RUN wget https://raw.githubusercontent.com/schnitz81/python-apps/main/nwlogger/nwlogger.py
