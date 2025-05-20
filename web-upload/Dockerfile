@@ -2,7 +2,7 @@
 #
 # Web interface for uploading file to server.
 
-FROM alpine:3.20
+FROM alpine:3.21
 RUN apk --no-cache update && apk add --no-cache nginx php83 php83-fpm sed apache2-utils netcat-openbsd
 
 # setup folders and users
@@ -11,7 +11,7 @@ RUN mkdir /www \
     && adduser -D -g 'www' www \
     && chown -R www:www /www \
     && chown -R www:www /upload \
-    && chown -R www:www /var/lib/nginx 
+    && chown -R www:www /var/lib/nginx
 
 # Defining ENV variables which will be used in configuration
 ENV PHP_FPM_USER="www"
@@ -31,15 +31,15 @@ ENV NGINX_MAX_BODY_SIZE="5G"
 
 
 
-# Modifying configuration file www.conf 
+# Modifying configuration file www.conf
 RUN sed -i "s|^[\;]\{0,1\}listen.owner.*|listen.owner = ${PHP_FPM_USER}|g" /etc/php83/php-fpm.d/www.conf \
     && sed -i "s|^[\;]\{0,1\}listen.group.*|listen.group = ${PHP_FPM_GROUP}|g" /etc/php83/php-fpm.d/www.conf \
     && sed -i "s|^[\;]\{0,1\}listen.mode.*|listen.mode = ${PHP_FPM_LISTEN_MODE}|g" /etc/php83/php-fpm.d/www.conf \
     && sed -i "s|^[\;]\{0,1\}user.*|user = ${PHP_FPM_USER}|g" /etc/php83/php-fpm.d/www.conf \
     && sed -i "s|^[\;]\{0,1\}group.*|group = ${PHP_FPM_GROUP}|g" /etc/php83/php-fpm.d/www.conf \
-    && sed -i "s|^[\;]\{0,1\}log_level.*|log_level = notice|g" /etc/php83/php-fpm.d/www.conf 
+    && sed -i "s|^[\;]\{0,1\}log_level.*|log_level = notice|g" /etc/php83/php-fpm.d/www.conf
 
-# Modifying configuration file php.ini 
+# Modifying configuration file php.ini
 RUN sed -i "s|^[\;]\{0,1\}display_errors.*|display_errors = ${PHP_DISPLAY_ERRORS}|i" /etc/php83/php.ini \
     && sed -i "s|^[\;]\{0,1\}display_startup_errors.*|display_startup_errors = ${PHP_DISPLAY_STARTUP_ERRORS}|i" /etc/php83/php.ini \
     && sed -i "s|^[\;]\{0,1\}error_reporting.*|error_reporting = ${PHP_ERROR_REPORTING}|i" /etc/php83/php.ini \
@@ -71,6 +71,6 @@ ENTRYPOINT ["/startup.sh"]
 #
 # Run cmd:
 # $ docker run --name web-upload -d -v /host/folder:/upload -p 8888:80 web-upload user password
-# 
+#
 # Change host folder and port 8888 to desired host port to expose.
 # The www user needs write access to the host folder.
