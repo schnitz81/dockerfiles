@@ -1,4 +1,4 @@
-FROM python:3.13-alpine
+FROM python:3.14-alpine
 RUN mkdir /ttycolorwave
 WORKDIR /ttycolorwave
 RUN wget https://raw.githubusercontent.com/schnitz81/python-apps/main/ttycolorwave/ttycolorwave.py \
