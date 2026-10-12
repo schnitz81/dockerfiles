@@ -2,7 +2,7 @@
 #
 # Web interface for uploading file to server.
 
-FROM alpine:3.23
+FROM alpine:3.24
 RUN apk --no-cache update && apk add --no-cache nginx php83 php83-fpm sed apache2-utils netcat-openbsd
 
 # setup folders and users
